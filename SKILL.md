@@ -303,4 +303,4 @@ RECOMMENDATION: [was User als nächstes tun sollte]
 
 ---
 
-**Der Skill wird gepflegt unter:** `github.com/asteragonagency/claude-skill-safe-debug-loop`
+**Der Skill wird gepflegt unter:** `github.com/Shavy72/claude-skill-safe-debug-loop`

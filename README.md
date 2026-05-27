@@ -77,7 +77,7 @@ Skill wird in `~/.claude/skills/safe-debug-loop/` installiert und ist dann in JE
 
 **Klon-Variante (empfohlen für Updates):**
 ```bash
-git clone https://github.com/asteragonagency/claude-skill-safe-debug-loop ~/.claude/skills/safe-debug-loop
+git clone https://github.com/Shavy72/claude-skill-safe-debug-loop ~/.claude/skills/safe-debug-loop
 ```
 
 **Manuelle Kopie:**
@@ -184,7 +184,7 @@ $ claude
 
 ## Pflege + Beiträge
 
-Skill wird unter [asteragonagency/claude-skill-safe-debug-loop](https://github.com/asteragonagency/claude-skill-safe-debug-loop) gepflegt.
+Skill wird unter [Shavy72/claude-skill-safe-debug-loop](https://github.com/Shavy72/claude-skill-safe-debug-loop) gepflegt.
 
 Issues + PRs willkommen.
 
