@@ -1,44 +1,44 @@
 # Prerequisites — Required + Recommended Tools
 
-**Vor jedem Phase-Start: Check + Status-Report + Gap-Hinweise.**
+**Before every phase start: check + status report + gap hints.**
 
-Der Skill arbeitet mit dem was DA ist und gibt Hinweise was zusätzlich nützlich wäre. Hier ist die strukturierte Übersicht.
-
----
-
-## Required (kritisch)
-
-Diese Tools müssen vorhanden sein damit der Skill seinen Kern erfüllen kann. Bei Fehlen: Skill verweigert den Start mit klarem Hinweis was zu installieren ist.
-
-| Tool | Was es macht | Install |
-|---|---|---|
-| Claude Code (CLI) | Host-Umgebung | https://claude.com/claude-code |
-| Git | Versionskontrolle für atomic commits | `winget install Git.Git` (Windows) |
-| Filesystem-Zugang | `.bug-sweep/` Persistenz | (kommt mit OS) |
-
-Wenn diese fehlen → Skill kann nicht arbeiten. Eskalation an User mit Install-Hinweisen.
+The skill works with what IS there and points out what else would be useful. Here is the structured overview.
 
 ---
 
-## Strongly Recommended (Skill läuft viel besser damit)
+## Required (critical)
 
-Diese Tools sollten installiert sein für solide Skill-Performance. Bei Fehlen: einmaliger Hinweis + Fallback aktivieren.
+These tools must be present for the skill to fulfil its core purpose. If they are missing the skill refuses to start with a clear note on what to install.
 
-| Tool | Rolle | Fallback wenn fehlt |
+| Tool | What it does | Install |
 |---|---|---|
-| **`agent-council` Skill** | 100%-Confidence-Validation in Phase 1 + Smoke-Test-Verdict | `codex` Skill als 2nd opinion ODER Self-Reasoning mit Checkliste (Warnung: "self-asserted Confidence") |
-| **`firecrawl` MCP** | Massiv-Parallel-Doc-Scraping in Phase 1 Part 1 | `WebFetch` (langsamer, weniger structured) |
-| **`perplexity` MCP** | Web-Research + Best-Practices-Lookup | `WebSearch` + manuelles Aggregieren |
-| **`context7` MCP** | Library-Doc-Lookup (npm/pypi-Packages) | `WebFetch` zur offiziellen Doku-Seite |
-| **`code-review-graph` MCP** | Architektur-Mapping, Hub/Bridge-Nodes, Impact-Radius | Glob+Grep+Read manuell (langsamer, weniger holistisch) |
-| **`browse` Skill (gstack)** | UI-Smoke-Tests | `playwright`-MCP / `claude-in-chrome`-MCP / `kapture`-MCP |
-| **`obsidian-mcp` ODER lokaler Vault** | Session-übergreifende Wissens-Basis | nur `.bug-sweep/` lokal (kein Cross-Projekt-Lookup) |
+| Claude Code (CLI) | Host environment | https://claude.com/claude-code |
+| Git | Version control for atomic commits | `winget install Git.Git` (Windows) |
+| Filesystem access | `.bug-sweep/` persistence | (comes with the OS) |
 
-### Install-Hinweise
+If these are missing → the skill cannot work. Escalate to the user with install hints.
 
-#### agent-council Skill
+---
+
+## Strongly recommended (the skill runs much better with these)
+
+These tools should be installed for solid skill performance. If they are missing: one note plus an activated fallback.
+
+| Tool | Role | Fallback if missing |
+|---|---|---|
+| **`agent-council` skill** | 100% confidence validation in Phase 1 plus the smoke-test verdict | The `codex` skill as a second opinion OR self-reasoning with a checklist (warning: "self-asserted confidence") |
+| **`firecrawl` MCP** | Massively parallel doc scraping in Phase 1 Part 1 | `WebFetch` (slower, less structured) |
+| **`perplexity` MCP** | Web research plus best-practice lookups | `WebSearch` plus manual aggregation |
+| **`context7` MCP** | Library doc lookup (npm/PyPI packages) | `WebFetch` against the official docs page |
+| **`code-review-graph` MCP** | Architecture mapping, hub/bridge nodes, impact radius | Glob+Grep+Read manually (slower, less holistic) |
+| **`browse` skill (gstack)** | UI smoke tests | `playwright` MCP / `claude-in-chrome` MCP / `kapture` MCP |
+| **A notes-vault MCP OR a local vault** | Cross-session knowledge base | `.bug-sweep/` locally only (no cross-project lookup) |
+
+### Install hints
+
+#### agent-council skill
 ```bash
-# Falls noch nicht im ~/.claude/skills/ vorhanden
+# If it is not already in ~/.claude/skills/
 git clone https://github.com/<source>/agent-council ~/.claude/skills/agent-council
 ```
 
@@ -51,7 +51,7 @@ claude mcp add firecrawl <command>
 #### perplexity MCP
 ```bash
 claude mcp add perplexity <command>
-# Erfordert PERPLEXITY_API_KEY
+# Requires PERPLEXITY_API_KEY
 ```
 
 #### context7 MCP
@@ -67,131 +67,131 @@ claude mcp add code-review-graph <command>
 
 ---
 
-## Recommended per Bug-Typ (gut zu haben)
+## Recommended per bug type (nice to have)
 
-Diese Tools verbessern Smoke-Tests + Symbiosen je nach Bug-Domain. Bei Fehlen: Gap-Hinweis, kein Block.
+These tools improve smoke tests and symbioses depending on the bug domain. If they are missing: a gap hint, not a blocker.
 
-### Web-/Dashboard-Bugs
-- `browse` Skill (gstack) — schnellste Browser-Tests
-- `playwright`-MCP — voller Browser-Stack
-- `claude-in-chrome`-MCP — Live-Chrome-Steuerung
-- `kapture`-MCP — Page-Scraping + DOM-Analyse
-- `deep-page-scan` Skill — strukturierte Page-Analyse
+### Web/dashboard bugs
+- `browse` skill (gstack) — fastest browser tests
+- `playwright` MCP — full browser stack
+- `claude-in-chrome` MCP — live Chrome control
+- `kapture` MCP — page scraping plus DOM analysis
+- `deep-page-scan` skill — structured page analysis
 
-### Backend/API-Bugs
-- `Bash` + `curl` (Standard, immer da)
-- HTTP-Test-MCPs (falls vorhanden)
-- `supabase`-MCP (wenn Supabase im Stack)
+### Backend/API bugs
+- `Bash` + `curl` (standard, always available)
+- HTTP test MCPs (if available)
+- `supabase` MCP (if Supabase is in the stack)
 
-### DB-Bugs
-- `supabase`-MCP (Supabase-Branches für Test-Schemas!)
-- Direkte DB-Clients über `Bash`
+### DB bugs
+- `supabase` MCP (Supabase branches for test schemas!)
+- Direct DB clients via `Bash`
 
-### n8n-Workflows
-- `n8n-mcp` MCP — strukturelle Workflow-Validierung + Schema-Lookup
-- `n8n-mastery` Skill — User-spezifische n8n-Patterns
+### n8n workflows
+- `n8n-mcp` MCP — structural workflow validation plus schema lookup
+- An n8n patterns skill for your own conventions
 
-### Mobile-Bugs
-- `adb-android-control` Skill — Android-Device-Control
-- iOS Simulator (extern)
+### Mobile bugs
+- `adb-android-control` skill — Android device control
+- iOS simulator (external)
 
-### Build/Deploy/CI
-- `gh` CLI — GitHub-Actions-Logs
-- Docker / Container-Engine
-- `n8n-deploy` Skill wenn n8n-relevant
+### Build/deploy/CI
+- `gh` CLI — GitHub Actions logs
+- Docker / container engine
+- A deploy skill if one applies to your stack
 
 ---
 
-## Optional (Quality-of-Life)
+## Optional (quality of life)
 
-| Tool | Rolle |
+| Tool | Role |
 |---|---|
-| `codex` Skill | 2nd-Opinion-Pattern, Adversarial-Mode |
-| `discovery-first` Skill | Pre-Task-Lookup-Discipline |
-| `handoff` Skill | Session-Übergänge sauber managen |
-| `commit` Skill | Conventional-Commit-Helper |
-| `verify` Skill | Standard-Verify-Patterns |
-| `qa` Skill | QA-Loop-Patterns |
-| `notebooklm` MCP | Wissens-Konsolidierung |
-| `scrape-creators` MCP | Industrie-Talk / Reddit / Twitter scrapen für Edge-Case-Discovery |
+| `codex` skill | Second-opinion pattern, adversarial mode |
+| `discovery-first` skill | Pre-task lookup discipline |
+| `handoff` skill | Managing session transitions cleanly |
+| `commit` skill | Conventional-commit helper |
+| `verify` skill | Standard verification patterns |
+| `qa` skill | QA loop patterns |
+| `notebooklm` MCP | Knowledge consolidation |
+| Social/forum scraping MCPs | Scrape industry talk / Reddit / Twitter for edge-case discovery |
 
 ---
 
-## Prerequisites-Check-Output (Beispiel)
+## Prerequisites check output (example)
 
-Bei jedem Phase-Start zeigt der Skill diesen Status-Block:
+At every phase start the skill shows this status block:
 
 ```markdown
-🔧 Prerequisites-Check für safe-debug-loop
+🔧 Prerequisites check for safe-debug-loop
 
 ✅ Required
 - Claude Code: ✓
 - Git: ✓
 - Filesystem: ✓
 
-✅ Strongly Recommended (5/6 verfügbar)
+✅ Strongly recommended (5/6 available)
 - agent-council: ✓
 - firecrawl: ✓
 - perplexity: ✓
 - context7: ✓
 - code-review-graph: ✓
 - browse: ✓
-- obsidian-mcp: ✗ → Fallback: nur .bug-sweep/ lokal (Cross-Projekt-Lookup deaktiviert)
-  💡 Install-Hinweis: claude mcp add obsidian-mcp <...>
+- notes vault: ✗ → fallback: .bug-sweep/ locally only (cross-project lookup disabled)
+  💡 Install hint: claude mcp add <notes-vault-mcp> <...>
 
-🟢 Bug-Type-Coverage
+🟢 Bug-type coverage
 - Web/UI: ✓ (browse + playwright)
 - API: ✓ (Bash + curl)
 - DB: ✓ (supabase)
 - n8n: ✓ (n8n-mcp)
-- Mobile: ✗ (adb-android-control fehlt) → falls Mobile-Bugs auftauchen: Gap-Hinweis
+- Mobile: ✗ (adb-android-control missing) → gap hint if mobile bugs come up
 
-✅ Effort-Mode: max
-✅ Repo: .bug-sweep/ wird angelegt
+✅ Effort mode: max
+✅ Repo: .bug-sweep/ will be created
 
-→ Skill startet Phase <N> ...
+→ Skill starts Phase <N> ...
 ```
 
 ---
 
-## Was passiert wenn Tools fehlen
+## What happens when tools are missing
 
-### Kritische Lücke (Required fehlt)
-- Skill **stoppt sofort**
-- Klarer Hinweis was fehlt
-- Install-Command wenn bekannt
-- User soll installieren + neu starten
+### Critical gap (a required tool is missing)
+- The skill **stops immediately**
+- Clear note on what is missing
+- Install command if known
+- The user installs and restarts
 
-### Wichtige Lücke (Strongly Recommended fehlt)
-- Skill **läuft mit Fallback**
-- Einmaliger Hinweis am Anfang
-- Bei Confidence-Validation explizit "self-asserted" markieren statt "Council-validated"
-- Skill schlägt vor: "Wenn du nach dieser Session Zeit hast: X installieren, beim nächsten Mal Y× besser"
+### Important gap (a strongly recommended tool is missing)
+- The skill **runs with a fallback**
+- One note at the start
+- Mark confidence validation explicitly as "self-asserted" instead of "council-validated"
+- The skill suggests: "if you have time after this session: install X, next time it will be Y× better"
 
-### Optionale Lücke (Bug-Type-Coverage)
-- Skill läuft normal
-- Wenn passender Bug auftaucht: Gap-Hinweis dass dieser Bug schwer verifizierbar wird ohne Tool X
-- Optional: Vorschlag den Bug zu deferren bis Tool installiert ist
+### Optional gap (bug-type coverage)
+- The skill runs normally
+- If a matching bug comes up: a gap hint that this bug becomes hard to verify without tool X
+- Optionally: propose deferring the bug until the tool is installed
 
 ---
 
-## Skill-Self-Maintenance
+## Skill self-maintenance
 
-Der Skill aktualisiert seine eigene Prerequisites-Liste nicht automatisch — das passiert manuell. Aber er gibt am Ende einer Session einen kompakten Report:
+The skill does not update its own prerequisites list automatically — that is done manually. But it gives a compact report at the end of a session:
 
 ```
-📊 Skill-Performance-Report dieser Session
+📊 Skill performance report for this session
 
-Tools genutzt:
-- firecrawl (15× parallel-scrapes) ✓
+Tools used:
+- firecrawl (15× parallel scrapes) ✓
 - perplexity (8× research) ✓
-- agent-council (3× confidence-checks) ✓
-- browse (12× smoke-tests) ✓
-- code-review-graph (5× impact-checks) ✓
+- agent-council (3× confidence checks) ✓
+- browse (12× smoke tests) ✓
+- code-review-graph (5× impact checks) ✓
 
-Tools die gefehlt haben:
-- obsidian-mcp → Wissensbasis nur lokal, kein Cross-Projekt-Sync
+Tools that were missing:
+- notes-vault MCP → knowledge base local only, no cross-project sync
 
-Empfehlung für nächstes Mal:
-- obsidian-mcp installieren für Cross-Session-Wissens-Persistenz
+Recommendation for next time:
+- Install a notes-vault MCP for cross-session knowledge persistence
 ```

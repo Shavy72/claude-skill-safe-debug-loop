@@ -1,169 +1,169 @@
-# Smoke-Test-Log — Bug #`<id>` — `<bug-titel>`
+# Smoke-test log — bug #`<id>` — `<bug-title>`
 
-**Pfad:** `.bug-sweep/smoke-tests/<bug-id>-smoke-log.md`
-**Erstellt durch:** safe-debug-loop Phase 2 (Step 5)
-**Start-Zeit:** `<YYYY-MM-DD HH:MM:SS>`
-
----
-
-## Bug-Referenz
-
-- **Bug-ID:** `#<id>`
-- **Titel:** `<titel>`
-- **Bug-Plan-File:** `.bug-sweep/bug-plan-<iso>.md` (oder `adhoc-bugs-<iso>.md`)
-- **Kategorie:** 🔴 Rot / 🟡 Gelb / 🟢 Grün
-- **Fix-Commit:** `<hash>` (wird nach Fix-Anwendung gefüllt)
+**Path:** `.bug-sweep/smoke-tests/<bug-id>-smoke-log.md`
+**Created by:** safe-debug-loop Phase 2 (step 5)
+**Start time:** `<YYYY-MM-DD HH:MM:SS>`
 
 ---
 
-## Smoke-Test-Strategie
+## Bug reference
 
-- **Typ:** API / UI / DB / Backend-Logic / n8n / Mobile / Build-Deploy
-- **Sandbox-Setup:** <konkret beschreiben — z.B. "Supabase Test-Branch", "lokaler Dev-Server", "Mock-API via msw", "Test-Account auf Staging">
-- **Originalgetreu-Score:** <1-10 wie nahe an Production-Realität — und Begründung>
+- **Bug ID:** `#<id>`
+- **Title:** `<title>`
+- **Bug-plan file:** `.bug-sweep/bug-plan-<iso>.md` (or `adhoc-bugs-<iso>.md`)
+- **Category:** 🔴 red / 🟡 yellow / 🟢 green
+- **Fix commit:** `<hash>` (filled in after the fix is applied)
 
 ---
 
-## Dummy-Daten (mit Marker)
+## Smoke-test strategy
 
-Vor dem Test erstellt — müssen am Ende cleaned werden:
+- **Type:** API / UI / DB / backend logic / n8n / mobile / build-deploy
+- **Sandbox setup:** <describe concretely — e.g. "Supabase test branch", "local dev server", "mock API via msw", "test account on staging">
+- **Faithfulness score:** <1-10, how close to production reality — plus a justification>
 
-- `__smoketest_<bug-id>_user_1` (User-Record in `users` Tabelle)
-- `__smoketest_<bug-id>_payload_1` (API-Payload mit diesem Marker)
-- `__smoketest_<bug-id>_event_*` (Event-Stream-Marker)
+---
+
+## Dummy data (with markers)
+
+Created before the test — must be cleaned up at the end:
+
+- `__smoketest_<bug-id>_user_1` (user record in the `users` table)
+- `__smoketest_<bug-id>_payload_1` (API payload with this marker)
+- `__smoketest_<bug-id>_event_*` (event-stream marker)
 - ...
 
 ---
 
 ## Iteration 1
 
-**Test-Schritte:**
-1. `<schritt>`
-2. `<schritt>`
-3. `<schritt>`
+**Test steps:**
+1. `<step>`
+2. `<step>`
+3. `<step>`
 
-**Outputs / Beweise:**
+**Outputs / evidence:**
 - `<command/click/curl>` → `<output>`
 - Screenshot: `.bug-sweep/smoke-tests/screenshots/<bug-id>-iter1-step3.png`
-- Console-Log:
+- Console log:
   ```
   <relevant log lines>
   ```
 
 **Assertions:**
-- [ ] Bug-Szenario reproduziert?
-- [ ] Fix greift?
-- [ ] Erwartetes Verhalten beobachtet?
-- [ ] Keine Side-Effects auf andere Bereiche?
+- [ ] Bug scenario reproduced?
+- [ ] Fix works?
+- [ ] Expected behaviour observed?
+- [ ] No side effects on other areas?
 
-**Ergebnis Iteration 1:** ✅ passed / ❌ failed
+**Result of iteration 1:** ✅ passed / ❌ failed
 
-**Wenn failed:** Grund + was wird in Iteration 2 anders gemacht.
-
----
-
-## Iteration 2 (nur wenn 1 failed)
-
-(gleiche Struktur)
+**If failed:** the reason plus what will be done differently in iteration 2.
 
 ---
 
-## Iteration 3 (nur wenn 2 failed)
+## Iteration 2 (only if 1 failed)
 
-(gleiche Struktur)
-
-**Wenn auch Iteration 3 failed:** Eskalations-Block am Ende füllen.
+(same structure)
 
 ---
 
-## Cleanup-Aktionen
+## Iteration 3 (only if 2 failed)
 
-Nach erfolgreichem Smoke-Test (✅ passed in irgendeiner Iteration):
+(same structure)
 
-**Schritte:**
-1. `<cleanup-aktion 1>` — z.B. `DELETE FROM users WHERE id LIKE '__smoketest_*'`
-2. `<cleanup-aktion 2>` — z.B. Test-Files löschen
-3. `<cleanup-aktion 3>` — z.B. Mock-Server stoppen
-
-**Cleanup-Logs:**
-- `<befehl>` → exit 0
-- `<befehl>` → exit 0
+**If iteration 3 also fails:** fill in the escalation block at the end.
 
 ---
 
-## Cleanup-Verify (Pflicht)
+## Cleanup actions
 
-Beweis dass NICHTS Test-Artefakte mehr da sind:
+After a successful smoke test (✅ passed in any iteration):
+
+**Steps:**
+1. `<cleanup action 1>` — e.g. `DELETE FROM users WHERE id LIKE '__smoketest_*'`
+2. `<cleanup action 2>` — e.g. delete test files
+3. `<cleanup action 3>` — e.g. stop the mock server
+
+**Cleanup logs:**
+- `<command>` → exit 0
+- `<command>` → exit 0
+
+---
+
+## Cleanup verification (mandatory)
+
+Evidence that NO test artefacts remain:
 
 ```
-<befehl 1 zur Such-Verifikation>
-→ 0 Treffer ✓
+<command 1 for search verification>
+→ 0 hits ✓
 
-<befehl 2>
-→ 0 Treffer ✓
+<command 2>
+→ 0 hits ✓
 
-<befehl 3 — Live-Version-Check>
-→ keine __smoketest_* Spuren ✓
-```
-
----
-
-## Council-Verdict (optional, wenn agent-council benutzt)
-
-```
-agent-council prompt: "Ist dieser Fix solide? Hier sind die Smoke-Test-Ergebnisse: ..."
-
-Council-Outcome: PASS / NEEDS_REWORK
-Stimmen:
-- Codex: PASS / NEEDS_REWORK — <begründung>
-- Gemini: PASS / NEEDS_REWORK — <begründung>
-- Synthesized Verdict: PASS / NEEDS_REWORK
+<command 3 — live version check>
+→ no __smoketest_* traces ✓
 ```
 
 ---
 
-## Final-Status
+## Council verdict (optional, if agent-council was used)
 
-- **Status:** ✅ passed / ❌ failed (mit Begründung)
-- **Iteration-Count:** 1 / 2 / 3
-- **Cleanup verifiziert:** ✅ / ❌
-- **Council-Verdict:** PASS / NEEDS_REWORK / not used
-- **Bug in Bug-Plan abgehakt:** ✅ / ❌
-- **End-Zeit:** `<YYYY-MM-DD HH:MM:SS>`
-- **Dauer:** `<minuten>` min
+```
+agent-council prompt: "Is this fix solid? Here are the smoke-test results: ..."
+
+Council outcome: PASS / NEEDS_REWORK
+Votes:
+- Codex: PASS / NEEDS_REWORK — <justification>
+- Gemini: PASS / NEEDS_REWORK — <justification>
+- Synthesised verdict: PASS / NEEDS_REWORK
+```
 
 ---
 
-## Logging-/Doku-Upgrade (parallel zum Fix gemacht)
+## Final status
 
-Was wurde in diesem Code-Bereich zusätzlich verbessert um zukünftige Bugs schneller zu finden:
+- **Status:** ✅ passed / ❌ failed (with a justification)
+- **Iteration count:** 1 / 2 / 3
+- **Cleanup verified:** ✅ / ❌
+- **Council verdict:** PASS / NEEDS_REWORK / not used
+- **Bug ticked off in the bug plan:** ✅ / ❌
+- **End time:** `<YYYY-MM-DD HH:MM:SS>`
+- **Duration:** `<minutes>` min
+
+---
+
+## Logging/docs upgrade (done alongside the fix)
+
+What else was improved in this code area to find future bugs faster:
 
 - **Logging:**
-  - <Stelle X: neuer Log mit `<level>` für `<event>`>
-  - <Stelle Y: Correlation-ID hinzugefügt>
-- **Code-Kommentare:**
-  - `<file:line>`: <was kommentiert wurde>
-- **Doku:**
-  - <README-Section / Inline-Doku aktualisiert>
+  - <place X: new log at `<level>` for `<event>`>
+  - <place Y: correlation ID added>
+- **Code comments:**
+  - `<file:line>`: <what was commented>
+- **Docs:**
+  - <README section / inline docs updated>
 
 ---
 
-## Eskalations-Block (nur wenn alle 3 Iterationen failed)
+## Escalation block (only if all 3 iterations failed)
 
-**Was wurde versucht:**
-1. Iteration 1: <was probiert>
-2. Iteration 2: <was anders gemacht>
-3. Iteration 3: <was wieder anders>
+**What was tried:**
+1. Iteration 1: <what was tried>
+2. Iteration 2: <what was done differently>
+3. Iteration 3: <what was done differently again>
 
-**Hypothesen die nicht funktionierten:**
-- <Hypothese 1 + warum sie falsch war>
-- <Hypothese 2 + warum sie falsch war>
-- <Hypothese 3 + warum sie falsch war>
+**Hypotheses that did not work:**
+- <hypothesis 1 + why it was wrong>
+- <hypothesis 2 + why it was wrong>
+- <hypothesis 3 + why it was wrong>
 
-**Empfehlung an User:**
-- A) <Alternative Fix-Strategie + Rationale>
-- B) <Bug als "blocked" markieren + andere Bugs zuerst>
-- C) <Codex-Consult oder Council-Deep-Dive>
-- D) <Manueller User-Eingriff erforderlich + was er beitragen müsste>
+**Recommendation to the user:**
+- A) <alternative fix strategy + rationale>
+- B) <mark the bug as "blocked" + other bugs first>
+- C) <codex consult or council deep dive>
+- D) <manual user intervention required + what they would need to contribute>
 
-**Skill wartet auf User-Entscheidung.**
+**The skill waits for the user's decision.**

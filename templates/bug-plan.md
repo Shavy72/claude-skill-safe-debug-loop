@@ -1,125 +1,125 @@
-# Bug-Plan — <modul-name> — <ISO-Date>
+# Bug plan — <module-name> — <ISO-Date>
 
-**Modul / Sektion:** `<pfad oder UI-Bereich>`
-**Live-URL (wenn vorhanden):** `<url>`
-**Lokale Dev-URL:** `<url>`
-**Research-Basis:** `.bug-sweep/research/`
-**Erstellt durch:** safe-debug-loop Phase 1
-**Confidence-Level:** 100% (Council-validated | self-asserted — eines davon explizit)
-**Start-Datum:** `<YYYY-MM-DD HH:MM>`
+**Module / section:** `<path or UI area>`
+**Live URL (if any):** `<url>`
+**Local dev URL:** `<url>`
+**Research basis:** `.bug-sweep/research/`
+**Created by:** safe-debug-loop Phase 1
+**Confidence level:** 100% (council-validated | self-asserted — state one explicitly)
+**Start date:** `<YYYY-MM-DD HH:MM>`
 
 ---
 
-## Bug-Summary
+## Bug summary
 
-| Kategorie | Anzahl |
+| Category | Count |
 |---|---|
-| 🔴 Rot — Dringend (MVP-Blocker / Sicherheit / Daten-Korruption) | N |
-| 🟡 Gelb — Wichtig (UX-Störung / Edge-Case / fehlendes Logging) | N |
-| 🟢 Grün — Vernachlässigbar (Code-Quality / Cosmetic) | N |
-| **Gesamt** | N |
+| 🔴 Red — urgent (MVP blocker / security / data corruption) | N |
+| 🟡 Yellow — important (UX disruption / edge case / missing logging) | N |
+| 🟢 Green — negligible (code quality / cosmetic) | N |
+| **Total** | N |
 
 ---
 
-## Empfohlene Fix-Reihenfolge
+## Recommended fix order
 
-1. **#R1** — `<titel>` (Root-Bug, mehrere andere hängen davon ab)
-2. **#R2** — `<titel>`
-3. **#R3** — `<titel>` (abhängig von #R1)
+1. **#R1** — `<title>` (root bug, several others depend on it)
+2. **#R2** — `<title>`
+3. **#R3** — `<title>` (depends on #R1)
 4. ...
 
-Begründung der Reihenfolge:
-- Root-Bugs zuerst (entlasten ggf. abhängige Bugs automatisch)
-- Hohe Kategorie vor niedriger
-- Bei gleicher Kategorie: kleinerer Blast-Radius zuerst
+Reasoning for the order:
+- Root bugs first (they may resolve dependent bugs automatically)
+- Higher category before lower
+- Within the same category: smaller blast radius first
 
 ---
 
-## Bug-Liste (vollständig)
+## Bug list (complete)
 
-### 🔴 R1 — `<bug-titel>`
+### 🔴 R1 — `<bug-title>`
 
 - **Status:** [ ] open
-- **Kategorie:** Rot — Dringend
-- **Symptom:** <was beobachtet — möglichst konkret mit Beweis-Pfad/Screenshot/Log>
-- **Surface:** <wo tritt das auf — URL/Endpoint/Funktion>
-- **Vermutete Root-Cause:** `<file>:<line>` — <was scheint kaputt>
-- **Recherche-Referenz:** <verweis auf .bug-sweep/research/...>
-- **Fix-Plan (minimal-invasiv):**
-  - <Schritt 1>
-  - <Schritt 2>
-  - <Schritt 3>
-- **Abhängigkeiten:** Bug #X muss vorher gefixt sein / unabhängig
-- **Blast-Radius:** <welche anderen Stellen könnten vom Fix betroffen sein>
-- **Smoke-Test-Strategie:** <welche aus references/smoke-test.md — API/UI/DB/Logic/etc>
-- **Logging-/Doku-Upgrade-Plan:** <was wird mit diesem Fix verbessert>
+- **Category:** red — urgent
+- **Symptom:** <what was observed — as concrete as possible, with an evidence path/screenshot/log>
+- **Surface:** <where it occurs — URL/endpoint/function>
+- **Suspected root cause:** `<file>:<line>` — <what appears to be broken>
+- **Research reference:** <pointer to .bug-sweep/research/...>
+- **Fix plan (minimally invasive):**
+  - <step 1>
+  - <step 2>
+  - <step 3>
+- **Dependencies:** bug #X has to be fixed first / independent
+- **Blast radius:** <which other places could be affected by the fix>
+- **Smoke-test strategy:** <which one from references/smoke-test.md — API/UI/DB/logic/etc>
+- **Logging/docs upgrade plan:** <what gets improved along with this fix>
 - **Estimate:** <S/M/L>
-- **Council-Verdict (wenn validiert):** <PASS / NEEDS_REWORK>
+- **Council verdict (if validated):** <PASS / NEEDS_REWORK>
 
 ---
 
-### 🔴 R2 — `<bug-titel>`
+### 🔴 R2 — `<bug-title>`
 
-(gleiche Struktur)
-
----
-
-### 🟡 Y1 — `<bug-titel>`
-
-(gleiche Struktur)
+(same structure)
 
 ---
 
-### 🟢 G1 — `<bug-titel>`
+### 🟡 Y1 — `<bug-title>`
 
-(gleiche Struktur)
-
----
-
-## Cross-Cutting-Findings
-
-Bugs die nicht eindeutig zuordenbar sind aber architektonisch beobachtet wurden:
-
-- **Logging-Konsistenz:** <z.B. einige Module loggen mit `console.log`, andere mit strukturiertem Logger>
-- **Error-Handling-Pattern:** <z.B. Try-Catch ohne spezifische Errors>
-- **API-Versionierung:** <z.B. teilweise v1 v2 gemischt>
-- **Naming-Konventionen:** <z.B. snake_case vs camelCase Mix>
-
-→ Diese werden bei den jeweiligen Bug-Fixes mit-adressiert (Logging-Upgrade-Plan).
+(same structure)
 
 ---
 
-## Externe Abhängigkeiten + Risiken
+### 🟢 G1 — `<bug-title>`
 
-- **API-Provider X:** Doku-Version `<version>` — bei Breaking-Changes diese Bugs neu prüfen
-- **Library Y:** Aktuelle Version `<v>` — wenn upgegradet werden muss, ggf. Folge-Bugs
-- **Auth-Provider:** `<name>` — Auth-bezogene Bugs erfordern Test-Account
+(same structure)
 
 ---
 
-## Persistenz
+## Cross-cutting findings
 
-- Bug-Plan-File: `.bug-sweep/bug-plan-<ISO-date>.md` (diese Datei)
-- Research-Files: `.bug-sweep/research/`
-- Smoke-Test-Logs: `.bug-sweep/smoke-tests/<bug-id>-smoke-log.md` (kommen in Phase 2)
-- Obsidian-Spiegelung: `Obsidian/projects/<projekt>/safe-debug-loop/` (falls Vault vorhanden)
+Bugs that cannot be assigned cleanly but were observed architecturally:
+
+- **Logging consistency:** <e.g. some modules log with `console.log`, others with a structured logger>
+- **Error-handling pattern:** <e.g. try-catch without specific errors>
+- **API versioning:** <e.g. v1 and v2 partly mixed>
+- **Naming conventions:** <e.g. snake_case vs camelCase mix>
+
+→ These are addressed alongside the respective bug fixes (logging upgrade plan).
 
 ---
 
-## Phase-2-Übergang
+## External dependencies + risks
 
-**Start-Prompt für Phase 2 Session (Copy-Paste):**
+- **API provider X:** docs version `<version>` — re-check these bugs on breaking changes
+- **Library Y:** current version `<v>` — if it has to be upgraded, expect follow-on bugs
+- **Auth provider:** `<name>` — auth-related bugs need a test account
+
+---
+
+## Persistence
+
+- Bug-plan file: `.bug-sweep/bug-plan-<ISO-date>.md` (this file)
+- Research files: `.bug-sweep/research/`
+- Smoke-test logs: `.bug-sweep/smoke-tests/<bug-id>-smoke-log.md` (created in Phase 2)
+- Vault mirror: `<vault>/projects/<project>/safe-debug-loop/` (if a notes vault exists)
+
+---
+
+## Handover to Phase 2
+
+**Start prompt for the Phase 2 session (copy-paste):**
 
 ```
 /safe-debug-loop Phase 2
 
-Bug-Plan: .bug-sweep/bug-plan-<ISO>.md
+Bug plan: .bug-sweep/bug-plan-<ISO>.md
 Research: .bug-sweep/research/
 
-Bitte arbeite den Plan iterativ durch — einen Bug nach dem anderen,
-mit Smoke-Test pro Fix. Holistik-Check vor jedem Fix.
+Please work through the plan iteratively — one bug at a time,
+with a smoke test per fix. Holistic check before every fix.
 ```
 
 ---
 
-**Phase 1 abgeschlossen.** Phase 2 übernimmt von hier.
+**Phase 1 complete.** Phase 2 takes over from here.

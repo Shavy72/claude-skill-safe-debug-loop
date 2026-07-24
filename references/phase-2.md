@@ -1,298 +1,296 @@
-# Phase 2 — Iterativer Bug-Fix-Loop mit Smoke-Test-Gate
+# Phase 2 — Iterative Bug-Fix Loop with a Smoke-Test Gate
 
-**Interaktiv, mit Copy-Paste-Prompts an User. Ein Bug nach dem anderen. Smoke-Test als Quality-Gate. Cleanup-Pflicht.**
+**Interactive, with copy-paste prompts for the user. One bug at a time. Smoke test as the quality gate. Cleanup is mandatory.**
 
-Phase 2 fixt Bugs einzeln, sicher und nachhaltig. Jeder Loop-Durchlauf verbessert auch Logging + Doku in dem betroffenen Code-Bereich.
-
----
-
-## Zwei Sub-Modi
-
-### Modus C1 — Frische-Session (klassisch nach Phase 1)
-
-User hat eine frische MAX-effort-Session mit `/safe-debug-loop Phase 2` gestartet, dann den Phase-1-Start-Prompt + MD-File-Path eingefügt.
-
-- Skill liest die Bug-Plan-MD
-- Skill liest die Research-Files in `.bug-sweep/research/`
-- Loop läuft über alle Bugs in der Reihenfolge des Plans (priorisiert nach Kategorie + Abhängigkeit)
-
-### Modus C2 — Mitten-im-Chat
-
-User arbeitet schon in einem aktiven Chat. Es gibt entweder:
-- **Einen konkreten Bug im Raum:** im Chat erwähnt, in einem Reasoning, in einer Task-Definition
-- **Einen Plan im Raum:** eine Liste mehrerer Bugs/Issues
-
-User ruft `/safe-debug-loop Phase 2` ohne Argument auf.
-
-- Skill scannt den letzten Chat-Verlauf nach Bugs/Plänen
-- Bei 1 konkretem Bug erkannt: Loop läuft für diesen 1 Bug
-- Bei Plan erkannt: Loop läuft über die erkannte Liste
-- Bei Unklarheit: kurze Rückfrage "Welcher Bug / Plan soll bearbeitet werden?"
-- Wenn keine MD-File existiert: Skill legt spontan eine an unter `.bug-sweep/adhoc-bugs-<ISO>.md` (Template [../templates/adhoc-bug.md](../templates/adhoc-bug.md))
-- Ab dann: identischer Loop wie Modus C1
+Phase 2 fixes bugs one by one, safely and sustainably. Every loop iteration also improves logging and documentation in the affected code area.
 
 ---
 
-## Der Loop (Sequenz pro Bug)
+## Two sub-modes
 
-### [1] Tool-Symbiose-Check
+### Mode C1 — fresh session (the classic path after Phase 1)
 
-Vor jedem Bug-Loop wird das Skill-/MCP-/Plugin-Inventar neu gecheckt (siehe [tool-symbiose.md](tool-symbiose.md)). Welche Tools helfen bei genau diesem Bug-Typ?
+The user started a fresh MAX-effort session with `/safe-debug-loop Phase 2` and then pasted the Phase 1 start prompt plus the markdown file path.
 
-### [2] LLM-Reasoning: Bug-Auswahl + Existenz-Check (KOMBINIERT)
+- The skill reads the bug-plan markdown
+- The skill reads the research files in `.bug-sweep/research/`
+- The loop runs over all bugs in the order of the plan (prioritised by category plus dependencies)
 
-**Interner Reasoning-Prompt (das LLM handelt direkt nach diesem Schema, keine User-Frage nötig):**
+### Mode C2 — mid-chat
 
-> "Wenn ich heute nur EINEN Bug aus dem Bug-Plan fixen dürfte/müsste, welcher wäre das? Bevor ich antworte, prüfe ich kurz aus dem aktuellen Code-Stand ob der Bug überhaupt noch besteht — denn durch frühere Fixes (oder Refactors zwischen Sessions) könnte er bereits indirekt mit-gefixt worden sein. Wenn ja → markiere ihn als 'obsolet — bereits gefixt' und wähle den nächsten."
+The user is already working in an active chat. There is either:
+- **A concrete bug on the table:** mentioned in the chat, in some reasoning, or in a task definition
+- **A plan on the table:** a list of several bugs/issues
 
-**Konkrete Verifikations-Aktionen für Existenz-Check:**
-- Read der Files die der Bug-Eintrag referenziert
-- Grep nach den Symptom-Patterns (z.B. fehlerhafte API-Calls, fehlende Error-Handler)
-- Wenn UI-Bug: kurzer Browser-Check via `browse` oder `playwright` (read-only, kein State-Change)
-- Wenn Logic-Bug: kurzer Dry-Run mit Testdaten (ohne Persistenz)
+The user invokes `/safe-debug-loop Phase 2` without an argument.
 
-**Output Step [2]:**
+- The skill scans the recent chat history for bugs/plans
+- If 1 concrete bug is detected: the loop runs for that single bug
+- If a plan is detected: the loop runs over the detected list
+- If it is unclear: one short question — "which bug / plan should I work on?"
+- If no markdown file exists: the skill creates one on the spot at `.bug-sweep/adhoc-bugs-<ISO>.md` (template [../templates/adhoc-bug.md](../templates/adhoc-bug.md))
+- From then on: the loop is identical to mode C1
+
+---
+
+## The loop (sequence per bug)
+
+### [1] Tool-symbiosis check
+
+Before every bug loop the skill/MCP/plugin inventory is re-checked (see [tool-symbiosis.md](tool-symbiosis.md)). Which tools help with exactly this type of bug?
+
+### [2] LLM reasoning: bug selection + existence check (COMBINED)
+
+**Internal reasoning prompt (the LLM acts directly on this schema, no user question needed):**
+
+> "If I were only allowed to fix ONE bug from the bug plan today, which one would it be? Before I answer I briefly check the current code state to see whether the bug still exists at all — because earlier fixes (or refactors between sessions) may already have fixed it indirectly. If so → mark it 'obsolete — already fixed' and pick the next one."
+
+**Concrete verification actions for the existence check:**
+- Read the files referenced by the bug entry
+- Grep for the symptom patterns (e.g. faulty API calls, missing error handlers)
+- If it is a UI bug: a quick browser check via `browse` or `playwright` (read-only, no state change)
+- If it is a logic bug: a quick dry run with test data (without persistence)
+
+**Output of step [2]:**
 
 ```markdown
-## Bug-Auswahl: #<id> — <titel>
+## Bug selection: #<id> — <title>
 
-**Existenz-Check:**
-- [x] Code-Stelle untersucht: <file:line>
-- [x] Symptom reproduziert / Pattern bestätigt
-- [x] Bug besteht noch
+**Existence check:**
+- [x] Code location inspected: <file:line>
+- [x] Symptom reproduced / pattern confirmed
+- [x] The bug still exists
 
-**Begründung Auswahl:**
-- Höchste Priorität (Kategorie 🔴 Rot)
-- Andere Bugs hängen davon ab (R3, R5 sind Folge-Bugs von #R1)
-- Minimal-invasiv lösbar
+**Reason for the selection:**
+- Highest priority (category 🔴 red)
+- Other bugs depend on it (R3, R5 are follow-on bugs of #R1)
+- Solvable in a minimally invasive way
 
-→ Weiter mit 12-Jährigen-Erklärung
+→ Continue with the explain-it-to-a-12-year-old step
 ```
 
-**Wenn der Bug bereits gefixt ist:**
+**If the bug has already been fixed:**
 
 ```markdown
-## Bug-Auswahl: #<id> — <titel>
+## Bug selection: #<id> — <title>
 
-**Existenz-Check:**
-- [x] Code-Stelle untersucht: <file:line>
-- [x] Bug ist NICHT mehr reproduzierbar — wurde indirekt durch Fix #X gefixt
+**Existence check:**
+- [x] Code location inspected: <file:line>
+- [x] The bug is NOT reproducible any more — it was fixed indirectly by fix #X
 
-**Aktion:**
-- Bug #<id> in MD-File markiert als "obsolet — bereits gefixt durch Folge-Effekt"
-- → Loop zurück zu Step [1] mit nächstem Bug
+**Action:**
+- Bug #<id> marked in the markdown file as "obsolete — already fixed as a side effect"
+- → Loop back to step [1] with the next bug
 ```
 
-### [3] Skill schlägt nächsten Copy-Paste-Prompt vor
+### [3] The skill proposes the next copy-paste prompt
 
-Am Ende von Step [2] zeigt der Skill dem User einen Copy-Paste-Block:
+At the end of step [2] the skill shows the user a copy-paste block:
 
 ```
 ╔══════════════════════════════════════════════════════════╗
-║  NÄCHSTER PROMPT — kopier in den Chat:                   ║
+║  NEXT PROMPT — paste this into the chat:                 ║
 ║  ─────────────────────────────────────────────────────   ║
-║  Erkläre mir diesen einen Bug, den du fixen würdest,     ║
-║  für einen 12-Jährigen verständlich. Erkläre es mit dem  ║
-║  wie du mir als User am besten erklären würdest laut     ║
-║  deiner Erfahrung aus der Zusammenarbeit mit mir und     ║
-║  nutze ein Schaubild aus der echten Welt. Stell dir vor  ║
-║  ich bin 12, schwer von Begriff und kann den Bug nicht   ║
-║  verstehen momentan. Antworte in einfacher Sprache für   ║
-║  maximale Verständlichkeit.                              ║
+║  Explain this one bug that you would fix so that a       ║
+║  12-year-old understands it. Explain it the way you      ║
+║  know from working with me explains things best, and     ║
+║  use an analogy from the real world. Imagine I am 12,    ║
+║  slow on the uptake, and cannot understand the bug       ║
+║  right now. Answer in simple language for maximum        ║
+║  clarity.                                                ║
 ║                                                          ║
-║  Erkläre:                                                ║
-║  1. Was der Bug macht / nicht macht                      ║
-║  2. Warum das ein großes Problem ist (auch global im     ║
-║     Dashboard, nicht nur lokal)                          ║
-║  3. Was der Fix genau machen wird                        ║
-║  4. Warum der Fix minimal-invasiv ist und keine anderen  ║
-║     Teile des Dashboards kaputt machen wird              ║
+║  Explain:                                                ║
+║  1. What the bug does / does not do                      ║
+║  2. Why that is a big problem (globally across the       ║
+║     dashboard, not just locally)                         ║
+║  3. What exactly the fix will do                         ║
+║  4. Why the fix is minimally invasive and will not       ║
+║     break other parts of the dashboard                   ║
 ║  ─────────────────────────────────────────────────────   ║
 ╚══════════════════════════════════════════════════════════╝
 ```
 
-User kopiert, sendet ab. LLM antwortet mit der einfachen Erklärung.
+The user copies it and sends it. The LLM answers with the simple explanation.
 
-### [4] Skill schlägt Fix-Ausführungs-Prompt vor
+### [4] The skill proposes the fix-execution prompt
 
-Nach der 12-Jährigen-Erklärung zeigt der Skill den nächsten Copy-Paste-Block:
+After the 12-year-old explanation the skill shows the next copy-paste block:
 
 ```
 ╔══════════════════════════════════════════════════════════╗
-║  NÄCHSTER PROMPT — kopier in den Chat:                   ║
+║  NEXT PROMPT — paste this into the chat:                 ║
 ║  ─────────────────────────────────────────────────────   ║
-║  Bitte führe diesen einen Bugfix aus, minimal invasiv.   ║
-║  Sorge dafür dass du 100% bewusst handelst und keine     ║
-║  anderen Code-Teile unseres Dashboards mit deinem Fix    ║
-║  kaputt machen wirst.                                    ║
+║  Please apply this one bug fix, minimally invasive.      ║
+║  Make sure you act with 100% awareness and will not      ║
+║  break any other code parts of our dashboard with your   ║
+║  fix.                                                    ║
 ║                                                          ║
-║  Pflicht-Schritte:                                       ║
-║  1. Pre-Check: lies alle Stellen die diese Funktion /    ║
-║     diesen Endpoint / dieses State-Feld nutzen           ║
-║  2. Fix anwenden (Edit/Write — kleinster Diff)           ║
-║  3. Atomic Commit: fix(<scope>): <bug-titel>             ║
-║  4. ISOLATED SMOKE-TEST (siehe references/smoke-test.md) ║
-║  5. Cleanup aller Dummy-Daten nach Smoke-Test            ║
-║  6. Logging/Doku/Code-Kommentare für diesen Bereich      ║
-║     verbessern (damit zukünftige Bugs hier besser        ║
-║     auffindbar sind)                                     ║
-║  7. Bug in .bug-sweep/bug-plan-*.md abhaken              ║
+║  Mandatory steps:                                        ║
+║  1. Pre-check: read every place that uses this           ║
+║     function / this endpoint / this state field          ║
+║  2. Apply the fix (edit/write — smallest diff)           ║
+║  3. Atomic commit: fix(<scope>): <bug-title>             ║
+║  4. ISOLATED SMOKE TEST (see references/smoke-test.md)   ║
+║  5. Clean up all dummy data after the smoke test         ║
+║  6. Improve logging/docs/code comments for this area     ║
+║     (so future bugs here are easier to find)             ║
+║  7. Tick the bug off in .bug-sweep/bug-plan-*.md         ║
 ║                                                          ║
-║  Wenn ein Schritt unsicher ist oder Risiko besteht andere║
-║  Teile zu brechen: STOP und frag mich.                   ║
+║  If any step is uncertain or risks breaking other        ║
+║  parts: STOP and ask me.                                 ║
 ║  ─────────────────────────────────────────────────────   ║
 ╚══════════════════════════════════════════════════════════╝
 ```
 
-### [5] LLM führt Fix aus + Smoke-Test (Quality-Gate)
+### [5] The LLM applies the fix + smoke test (quality gate)
 
-Der LLM macht:
+The LLM does the following:
 
-1. **Pre-Check** — Holistik-Scan
-   - Welche anderen Files/Stellen referenzieren die Funktion/den Endpoint/den State?
-   - Welche Tests laufen darüber (falls vorhanden)?
-   - Welche aktiven Sessions / aktiven User könnten betroffen sein?
+1. **Pre-check** — holistic scan
+   - Which other files/places reference the function/the endpoint/the state?
+   - Which tests cover it (if any)?
+   - Which active sessions / active users could be affected?
 
-2. **Fix-Anwendung** — minimaler Diff
-   - Edit/Write nur die nötigen Stellen
-   - Kein adjacent-Refactor
-   - Conventional-Commit-Stil
+2. **Apply the fix** — minimal diff
+   - Edit/write only the necessary places
+   - No adjacent refactoring
+   - Conventional-commit style
 
-3. **Atomic Commit** (wenn Repo aktiv)
-   - `fix(<scope>): <bug-titel>`
-   - Body referenziert Bug-ID + Root-Cause + Verifikation
+3. **Atomic commit** (if the repo is active)
+   - `fix(<scope>): <bug-title>`
+   - The body references the bug ID, the root cause and the verification
 
-4. **ISOLATED SMOKE-TEST** — siehe [smoke-test.md](smoke-test.md) für Strategien
-   - Sandbox-Setup originalgetreu
-   - Dummy-Daten / Mocks
-   - Reproduziert das ursprüngliche Bug-Szenario
-   - Verifiziert dass Fix greift
-   - Wenn nicht 100% verifiziert: automatische Iteration (max 3 Versuche)
-   - Wenn verifiziert: **Cleanup-Pflicht**
+4. **ISOLATED SMOKE TEST** — see [smoke-test.md](smoke-test.md) for strategies
+   - Faithful sandbox setup
+   - Dummy data / mocks
+   - Reproduces the original bug scenario
+   - Verifies that the fix works
+   - If not 100% verified: automatic iteration (max 3 attempts)
+   - If verified: **cleanup duty**
 
-5. **Cleanup-Beweis** — explizit dokumentiert
-   - Welche Dummy-Daten wurden erstellt → entfernt? ✅
-   - Welche Test-Files → cleared? ✅
-   - Welche Test-Endpoints/Mocks → disconnected? ✅
-   - Live-Version hat KEINE Test-Reste → bestätigt ✅
+5. **Cleanup evidence** — documented explicitly
+   - Which dummy data was created → removed? ✅
+   - Which test files → cleared? ✅
+   - Which test endpoints/mocks → disconnected? ✅
+   - The live version has NO test leftovers → confirmed ✅
 
-6. **Logging/Doku/Code-Kommentar-Upgrade**
-   - In diesem Code-Bereich Logging detaillierter machen
-   - Inline-Kommentare ergänzen wo Verhalten subtil ist
-   - README / Doku updaten wenn betroffen
-   - Ziel: zukünftige Bugs in diesem Bereich sind in Live-Version vom LLM detailliert prüfbar
+6. **Logging/docs/code-comment upgrade**
+   - Make logging more detailed in this code area
+   - Add inline comments where behaviour is subtle
+   - Update the README / docs if affected
+   - Goal: future bugs in this area are inspectable in detail by an LLM in the live version
 
-7. **Bug-Plan-MD updaten**
-   - Bug-Status: ✅ done
-   - Beweis: Commit-Hash + Smoke-Test-Log-Pfad
-   - Welche Logging/Doku-Verbesserungen wurden gemacht
+7. **Update the bug-plan markdown**
+   - Bug status: ✅ done
+   - Evidence: commit hash + smoke-test log path
+   - Which logging/docs improvements were made
 
-8. **Live-Schaltung (wenn anwendbar)**
-   - Wenn Modul schon live war: Fix wird live deployt (merge / push / re-deploy je nach Setup)
-   - Wenn nur lokal: bleibt lokal
-   - Post-Live-Check: kurz dass Live-Version den Fix zeigt
+8. **Going live (if applicable)**
+   - If the module was already live: the fix is deployed live (merge / push / re-deploy depending on the setup)
+   - If it is local only: it stays local
+   - Post-live check: briefly confirm the live version shows the fix
 
-9. **Council-Optional**
-   - Wenn `agent-council` installiert: kurzer Council-Check ob der Fix solide ist
-   - Council-Verdict wird im Smoke-Test-Log dokumentiert
+9. **Council (optional)**
+   - If `agent-council` is installed: a short council check on whether the fix is solid
+   - The council verdict is documented in the smoke-test log
 
-### [6] Zusammenfassung an User
+### [6] Summary for the user
 
-Der LLM antwortet mit:
+The LLM answers with:
 
 ```markdown
-## ✅ Bug #<id> gefixt
+## ✅ Bug #<id> fixed
 
-**Was wurde gemacht:** <kurze technische Zusammenfassung>
+**What was done:** <short technical summary>
 **Commit:** <hash>
-**Smoke-Test:** ✅ passed (siehe .bug-sweep/smoke-tests/<id>-smoke-log.md)
-**Cleanup:** ✅ verifiziert
-**Logging-Upgrade:** <was wurde verbessert>
-**Doku-Upgrade:** <was wurde verbessert>
+**Smoke test:** ✅ passed (see .bug-sweep/smoke-tests/<id>-smoke-log.md)
+**Cleanup:** ✅ verified
+**Logging upgrade:** <what was improved>
+**Docs upgrade:** <what was improved>
 
-### Warum dieser Fix gut ist
-<Erklärung warum technisch solide, warum minimal-invasiv>
+### Why this fix is good
+<explain why it is technically solid and why it is minimally invasive>
 
-### Was zukünftig dadurch besser ist
-<Erklärung welche zukünftigen Bug-Klassen jetzt schneller erkennbar sind>
+### What is better going forward
+<explain which future bug classes are now easier to spot>
 
-### Was du als User langfristig beobachten sollst
-<konkrete Anhaltspunkte: Logs, Metriken, Verhalten — damit User selbst sehen kann ob Fix langfristig hält>
+### What you as the user should watch long term
+<concrete signals: logs, metrics, behaviour — so the user can tell whether the fix holds>
 ```
 
-### [7] /compact-Vorschlag
+### [7] /compact suggestion
 
-Am Ende der Antwort:
+At the end of the answer:
 
 ```
 ╔══════════════════════════════════════════════════════════╗
-║  NÄCHSTER SCHRITT — optional:                            ║
+║  NEXT STEP — optional:                                   ║
 ║  ─────────────────────────────────────────────────────   ║
-║  /compact Focus: bug-plan, nächste Bugs aus Phase 1      ║
+║  /compact Focus: bug plan, next bugs from Phase 1        ║
 ║                                                          ║
-║  Empfehlung: jetzt /compact ausführen damit Context      ║
-║  für nächste Bug-Iteration frei wird. Der Skill liest    ║
-║  den Bug-Plan beim nächsten Durchgang neu ein.           ║
+║  Recommendation: run /compact now so context is freed    ║
+║  for the next bug iteration. The skill re-reads the      ║
+║  bug plan on the next pass.                              ║
 ║  ─────────────────────────────────────────────────────   ║
 ╚══════════════════════════════════════════════════════════╝
 
-Wenn du bereit bist für den nächsten Bug, schick einfach
-"weiter" oder einen leeren /safe-debug-loop Phase 2 Aufruf —
-ich starte dann automatisch die nächste Loop-Iteration.
+When you are ready for the next bug, just send "next" or an
+empty /safe-debug-loop Phase 2 call — I will then start the
+next loop iteration automatically.
 ```
 
-### [8] Nächste Iteration
+### [8] Next iteration
 
-User schickt "weiter" oder Loop wird automatisch fortgesetzt. Skill springt zurück zu Step [1] mit dem nächsten Bug aus dem Plan.
+The user sends "next" or the loop continues automatically. The skill jumps back to step [1] with the next bug from the plan.
 
 ---
 
-## Loop-Ende (alle Bugs durch)
+## End of the loop (all bugs done)
 
-Wenn die Bug-Liste komplett abgearbeitet ist (alle ✅ oder als "obsolet" markiert):
+Once the bug list is fully worked through (everything ✅ or marked "obsolete"):
 
 ```markdown
-## 🎉 Phase 2 Abgeschlossen
+## 🎉 Phase 2 complete
 
-**Bugs gefixt:** N (davon X 🔴, Y 🟡, Z 🟢)
-**Bugs als obsolet markiert (bereits gefixt):** M
-**Commits:** N atomic Commits
-**Logging-Upgrades:** in K Code-Bereichen verbessert
-**Doku-Upgrades:** in J Files ergänzt
+**Bugs fixed:** N (of which X 🔴, Y 🟡, Z 🟢)
+**Bugs marked obsolete (already fixed):** M
+**Commits:** N atomic commits
+**Logging upgrades:** improved in K code areas
+**Docs upgrades:** extended in J files
 
-### MVP-Readiness-Check
-<Skill bewertet: ist das Modul jetzt MVP-tauglich? Welche Risiken bleiben?>
+### MVP readiness check
+<the skill assesses: is the module MVP-ready now? Which risks remain?>
 
-### Empfohlene nächste Schritte
-- [ ] Live-Deploy (wenn noch nicht passiert)
-- [ ] Beta-Test mit kleinem User-Kreis
-- [ ] Monitoring der neuen Logging-Pfade in den ersten 24h
-- [ ] Optional: weitere Phase-1-Iteration in 2-4 Wochen für neue Erkenntnisse aus Live-Daten
+### Recommended next steps
+- [ ] Live deploy (if it has not happened yet)
+- [ ] Beta test with a small group of users
+- [ ] Monitor the new logging paths for the first 24h
+- [ ] Optional: another Phase 1 iteration in 2-4 weeks for new insights from live data
 
-### Persistierte Wissens-Basis
-- `.bug-sweep/bug-plan-<ISO>.md` (komplett durchgearbeitet)
-- `.bug-sweep/smoke-tests/` (alle Smoke-Test-Logs)
-- `.bug-sweep/research/` (Wissens-Basis für künftige Sessions)
-- Obsidian-Vault (gespiegelt, wenn vorhanden)
+### Persisted knowledge base
+- `.bug-sweep/bug-plan-<ISO>.md` (fully worked through)
+- `.bug-sweep/smoke-tests/` (all smoke-test logs)
+- `.bug-sweep/research/` (knowledge base for future sessions)
+- Notes vault (mirrored, if available)
 ```
 
 ---
 
-## Eskalations-Regeln im Loop
+## Escalation rules inside the loop
 
-- **Smoke-Test 3× nicht bestanden für selben Bug:** STOP, User-Handoff mit Frage "A) andere Fix-Strategie B) Bug als 'blocked' markieren C) externe Hilfe (Codex / Council)"
-- **Blast-Radius >5 Files:** STOP, User-Bestätigung holen
-- **Live-Deploy schlägt fehl:** STOP, Rollback prüfen, User informieren
-- **Cleanup-Verifikation schlägt fehl:** STOP, manuelles Aufräumen erforderlich, kein Bug abhaken bevor Cleanup 100%
+- **Smoke test failed 3× for the same bug:** STOP, hand off to the user with the question "A) different fix strategy B) mark the bug as 'blocked' C) external help (codex / council)"
+- **Blast radius >5 files:** STOP, get user confirmation
+- **Live deploy fails:** STOP, check the rollback, inform the user
+- **Cleanup verification fails:** STOP, manual cleanup required, do not tick the bug off before cleanup is 100%
 
 ---
 
-## Was Phase 2 NIE tut
+## What Phase 2 NEVER does
 
-- ❌ Mehrere Bugs gleichzeitig fixen
-- ❌ Bug abhaken ohne Smoke-Test-Bestätigung
-- ❌ Test-Reste in Live-Version zurücklassen
-- ❌ Fix ohne Pre-Check (Holistik) anwenden
-- ❌ Refactor angrenzender Stellen ohne expliziten User-OK
-- ❌ Mehrere Bugs in einem Commit
-- ❌ Bug als gefixt deklarieren ohne Beweis (Smoke-Test-Log)
+- ❌ Fix several bugs at once
+- ❌ Tick a bug off without smoke-test confirmation
+- ❌ Leave test leftovers in the live version
+- ❌ Apply a fix without a pre-check (holistic)
+- ❌ Refactor adjacent places without explicit user approval
+- ❌ Put several bugs in one commit
+- ❌ Declare a bug fixed without evidence (smoke-test log)

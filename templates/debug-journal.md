@@ -1,120 +1,120 @@
-# Debug-Journal — `<projekt-name>`
+# Debug journal — `<project-name>`
 
-**Pfad:** `.bug-sweep/debug-journal.md`
-**Zweck:** Session-übergreifendes Journal aller safe-debug-loop-Sessions für dieses Modul. Wächst über Zeit.
-
----
-
-## Wofür dieses Journal
-
-- Zukünftige Claude-Sessions können hier nachschauen was schon gefixt wurde
-- Recurring Patterns werden sichtbar (gleicher Bug-Typ tritt immer wieder auf → architektonisches Smell)
-- Logging-/Doku-Fortschritt ist nachvollziehbar
-- Bei neuen Bugs: Cross-Reference auf ähnliche frühere Bugs spart Investigations-Zeit
+**Path:** `.bug-sweep/debug-journal.md`
+**Purpose:** a cross-session journal of all safe-debug-loop sessions for this module. It grows over time.
 
 ---
 
-## Session-Index
+## What this journal is for
 
-| # | Datum | Phase | Bugs adressiert | Status | Bug-Plan-File |
+- Future Claude sessions can look up what has already been fixed
+- Recurring patterns become visible (the same bug type keeps coming back → an architectural smell)
+- Logging/docs progress stays traceable
+- For new bugs: cross-referencing similar earlier bugs saves investigation time
+
+---
+
+## Session index
+
+| # | Date | Phase | Bugs addressed | Status | Bug-plan file |
 |---|---|---|---|---|---|
 | 1 | `<YYYY-MM-DD>` | 1+2 | 24 (7R/12Y/5G) | ✅ done | `bug-plan-<iso>.md` |
-| 2 | `<YYYY-MM-DD>` | 2 (adhoc) | 3 | ✅ done | `adhoc-bugs-<iso>.md` |
+| 2 | `<YYYY-MM-DD>` | 2 (ad hoc) | 3 | ✅ done | `adhoc-bugs-<iso>.md` |
 | 3 | `<YYYY-MM-DD>` | 1+2 | 8 (2R/4Y/2G) | 🔄 in progress | `bug-plan-<iso>.md` |
 | ... | | | | | |
 
 ---
 
-## Session #1 — `<YYYY-MM-DD>` — Phase 1+2 (Initial Sanierung)
+## Session #1 — `<YYYY-MM-DD>` — Phase 1+2 (initial remediation)
 
-**Modul/Bereich:** `<beschreibung>`
-**Trigger:** "<was der User sagte / Anlass>"
-**Dauer:** ~`<h>` h
-**Tool-Stack-Snapshot:** `<welche Skills/MCPs/Plugins waren installiert>`
+**Module/area:** `<description>`
+**Trigger:** "<what the user said / the occasion>"
+**Duration:** ~`<h>` h
+**Tool stack snapshot:** `<which skills/MCPs/plugins were installed>`
 
-### Phase 1 Ergebnisse
-- Research-Files erstellt: `<liste>`
-- Bug-Plan: `<filepath>`
-- Confidence-Level: 100% Council-validated / self-asserted
-- Bugs gefunden: N (X 🔴 / Y 🟡 / Z 🟢)
+### Phase 1 results
+- Research files created: `<list>`
+- Bug plan: `<filepath>`
+- Confidence level: 100% council-validated / self-asserted
+- Bugs found: N (X 🔴 / Y 🟡 / Z 🟢)
 
-### Phase 2 Ergebnisse
-- Bugs gefixt: M von N
-- Davon obsolet (bereits gefixt): K
-- Davon blockiert: L (Grund: ...)
-- Smoke-Tests passed: M
-- Atomic Commits: M
-- Logging-Upgrades in: <K Bereiche>
-- Doku-Upgrades in: <J Files>
+### Phase 2 results
+- Bugs fixed: M of N
+- Of those obsolete (already fixed): K
+- Of those blocked: L (reason: ...)
+- Smoke tests passed: M
+- Atomic commits: M
+- Logging upgrades in: <K areas>
+- Docs upgrades in: <J files>
 
-### Key Learnings dieser Session
-- **<Lerneffekt 1>:** Beobachtung + warum wichtig für Zukunft
-- **<Lerneffekt 2>:** ...
+### Key learnings from this session
+- **<learning 1>:** observation + why it matters going forward
+- **<learning 2>:** ...
 
-### Recurring Patterns (Achtung!)
-- **<Pattern X>:** Tritt schon zum N-ten Mal auf → architektonisches Refactor empfohlen
+### Recurring patterns (watch out!)
+- **<pattern X>:** this is the Nth time it shows up → an architectural refactor is recommended
 - ...
 
-### Open Items für nächste Sessions
-- [ ] <was nicht geschafft wurde + warum>
-- [ ] <neue Erkenntnis die in Phase 1 #2 berücksichtigt werden sollte>
+### Open items for future sessions
+- [ ] <what was not finished + why>
+- [ ] <a new insight that should be taken into account in the next Phase 1>
 
 ---
 
-## Session #2 — `<YYYY-MM-DD>` — Phase 2 (Adhoc)
+## Session #2 — `<YYYY-MM-DD>` — Phase 2 (ad hoc)
 
-(gleiche Struktur, kürzer wenn nur Adhoc)
+(same structure, shorter if it was ad hoc only)
 
 ---
 
-## Cross-Session Findings
+## Cross-session findings
 
-### Persistent Architectural Smells
+### Persistent architectural smells
 
-Patterns die sich über mehrere Sessions ziehen:
+Patterns that span several sessions:
 
-- **<Smell 1>:** <beschreibung> — empfohlen: <refactor / monitor / accept>
-- **<Smell 2>:** ...
+- **<smell 1>:** <description> — recommended: <refactor / monitor / accept>
+- **<smell 2>:** ...
 
-### Logging-Reifegrad
+### Logging maturity
 
-Wo steht das Logging im Modul jetzt:
+Where logging stands in the module now:
 
-- ✅ <Bereiche mit gutem strukturiertem Logging>
-- 🟡 <Bereiche mit teilweisem Logging>
-- ❌ <Bereiche ohne sinnvolles Logging — Priorität für nächste Session>
+- ✅ <areas with good structured logging>
+- 🟡 <areas with partial logging>
+- ❌ <areas without meaningful logging — priority for the next session>
 
-### Doku-Reifegrad
+### Docs maturity
 
-- ✅ <gut dokumentierte Bereiche>
-- 🟡 <teil-dokumentierte Bereiche>
-- ❌ <undokumentierte Bereiche — Doku-Schulden>
+- ✅ <well documented areas>
+- 🟡 <partly documented areas>
+- ❌ <undocumented areas — documentation debt>
 
-### Tool-Coverage-Lücken
+### Tool coverage gaps
 
-Tools die mehrfach gefehlt haben:
+Tools that were missing repeatedly:
 
-- `<tool x>` (mehrfach Gap-Hinweis gewesen) → empfohlen zu installieren
+- `<tool x>` (has been a gap hint several times) → recommended to install
 - ...
 
 ---
 
-## Zukunfts-Roadmap (vom Skill vorgeschlagen)
+## Future roadmap (proposed by the skill)
 
-Basierend auf den Findings über alle Sessions:
+Based on the findings across all sessions:
 
-1. **<vorschlag 1>** — z.B. "Migrate API-Calls von v1 zu v2 (Doku-Mismatch in 4 Sessions hintereinander)"
-2. **<vorschlag 2>** — z.B. "Strukturiertes Logging-Framework einführen (manuelle Log-Calls sind ineffizient)"
-3. **<vorschlag 3>** — ...
+1. **<proposal 1>** — e.g. "migrate API calls from v1 to v2 (doc mismatch in 4 sessions in a row)"
+2. **<proposal 2>** — e.g. "introduce a structured logging framework (manual log calls are inefficient)"
+3. **<proposal 3>** — ...
 
 ---
 
-## Quick-Reference für zukünftige Sessions
+## Quick reference for future sessions
 
-Wenn jemand (Claude oder Mensch) in 3 Monaten dieses Modul debuggt:
+If someone (Claude or a human) debugs this module in 3 months:
 
-- **Modul-Übersicht:** `.bug-sweep/research/module-overview.md`
-- **API-Dependencies:** `.bug-sweep/research/api-docs/`
-- **Bekannte Edge-Cases:** `.bug-sweep/research/gotchas.md`
-- **Logging-Konventionen:** siehe Logging-Reifegrad oben
-- **Recurring Issues:** siehe Persistent Architectural Smells oben
+- **Module overview:** `.bug-sweep/research/module-overview.md`
+- **API dependencies:** `.bug-sweep/research/api-docs/`
+- **Known edge cases:** `.bug-sweep/research/gotchas.md`
+- **Logging conventions:** see logging maturity above
+- **Recurring issues:** see persistent architectural smells above
