@@ -1,0 +1,19 @@
+{
+  "name": "safe-debug-loop",
+  "version": "1.0.0",
+  "description": "Multi-session Claude Code skill for strategic module remediation — research-first bug inventory, then an iterative one-bug loop with isolated smoke-test gates",
+  "author": {
+    "name": "Shavy72"
+  },
+  "homepage": "https://github.com/Shavy72/claude-skill-safe-debug-loop",
+  "repository": "https://github.com/Shavy72/claude-skill-safe-debug-loop",
+  "license": "MIT",
+  "keywords": [
+    "claude-code",
+    "agent-skills",
+    "debugging",
+    "bug-fixing",
+    "qa",
+    "smoke-testing"
+  ]
+}

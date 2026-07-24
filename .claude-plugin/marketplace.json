@@ -1,0 +1,22 @@
+{
+  "name": "claude-skill-safe-debug-loop",
+  "owner": {
+    "name": "Shavy72"
+  },
+  "metadata": {
+    "description": "Strategic, multi-session bug remediation skill for Claude Code",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "safe-debug-loop",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/Shavy72/claude-skill-safe-debug-loop.git"
+      },
+      "description": "Multi-session Claude Code skill for strategic module remediation — research-first bug inventory, then an iterative one-bug loop with isolated smoke-test gates",
+      "version": "1.0.0",
+      "strict": true
+    }
+  ]
+}

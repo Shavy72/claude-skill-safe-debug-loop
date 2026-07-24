@@ -1,8 +1,28 @@
+<p align="center">
+  <img src="assets/banner.png" alt="safe-debug-loop banner" width="100%">
+</p>
+
+<p align="center">
+  <a href="https://skills.sh/Shavy72/claude-skill-safe-debug-loop"><img src="https://skills.sh/b/Shavy72/claude-skill-safe-debug-loop" alt="Install with skills.sh"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/Shavy72/claude-skill-safe-debug-loop" alt="License"></a>
+  <a href="https://github.com/Shavy72/claude-skill-safe-debug-loop/stargazers"><img src="https://img.shields.io/github/stars/Shavy72/claude-skill-safe-debug-loop" alt="Stars"></a>
+</p>
+
 # safe-debug-loop
 
-**A multi-session Claude skill for the strategic remediation of complex dashboard/app modules that have too many bugs for an MVP launch.**
+**A multi-session Claude Code skill for the strategic remediation of complex dashboard/app modules that have too many bugs for an MVP launch.**
 
 Instead of ad-hoc fixes you build strategically: first knowledge plus a bug inventory (Phase 1, one session), then iterative and safe fixing with an isolated smoke test per bug (Phase 2, second session). Every loop iteration also improves logging, documentation and code comments — so that future debugging keeps getting easier across sessions.
+
+---
+
+## Quickstart
+
+```bash
+npx skills add Shavy72/claude-skill-safe-debug-loop
+```
+
+Then in Claude Code, invoke `/safe-debug-loop` to start.
 
 ---
 
@@ -71,17 +91,26 @@ The loop runs until the plan is fully worked through.
 
 ## Installation
 
-### As a global Claude Code skill
+### skills CLI
 
-The skill is installed into `~/.claude/skills/safe-debug-loop/` and is then available in EVERY Claude Code session.
+```bash
+npx skills add Shavy72/claude-skill-safe-debug-loop
+```
 
-**Clone variant (recommended for updates):**
+### Claude Code Plugin
+
+```
+/plugin marketplace add Shavy72/claude-skill-safe-debug-loop
+/plugin install safe-debug-loop@claude-skill-safe-debug-loop
+```
+
+### git clone (recommended for tracking updates)
+
 ```bash
 git clone https://github.com/Shavy72/claude-skill-safe-debug-loop ~/.claude/skills/safe-debug-loop
 ```
 
-**Manual copy:**
-- Copy the `safe-debug-loop/` directory from this repo into `~/.claude/skills/`.
+**Manual copy:** copy the `safe-debug-loop/` directory from this repo into `~/.claude/skills/`.
 
 **Verify:**
 ```bash
@@ -187,6 +216,12 @@ $ claude
 The skill is maintained at [Shavy72/claude-skill-safe-debug-loop](https://github.com/Shavy72/claude-skill-safe-debug-loop).
 
 Issues and PRs welcome.
+
+---
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md).
 
 ---
 
